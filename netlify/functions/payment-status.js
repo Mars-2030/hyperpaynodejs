@@ -8,7 +8,6 @@ exports.handler = async (event) => {
     // Get the raw ID from the query parameter
     let { id } = event.queryStringParameters;
 
-    // --- THIS IS THE CRITICAL FIX ---
     // The ID from the redirect can include transaction metadata after a dot.
     // We must clean it to get only the pure checkout ID before using it.
     // if (id && id.includes('.')) {

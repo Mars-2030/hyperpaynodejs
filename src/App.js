@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, 'useState', 'useEffect' from 'react';
 import {
     BrowserRouter as Router,
     Routes,
@@ -44,14 +44,12 @@ function PaymentForm() {
         setIsLoading(true);
         setError(null);
         try {
-            // --- ADDED ---
             // Create the full, absolute URL for the redirect
             const redirectUrl = `${window.location.origin}/status`;
 
             const response = await fetch('/api/prepare-checkout', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                // --- MODIFIED ---
                 // Send the form data AND the absolute redirect URL to our backend
                 body: JSON.stringify({ ...formData, shopperResultUrl: redirectUrl }),
             });
@@ -72,10 +70,6 @@ function PaymentForm() {
         }
     };
 
-    // --- ADDED ---
-    // Define the redirect URL to be used in the form action
-    const redirectUrl = `${window.location.origin}/status`;
-
     return (
         <div className="container">
             <h1>Payment Details</h1>
@@ -92,9 +86,12 @@ function PaymentForm() {
             ) : (
                 <div>
                     <h3>Complete Your Payment</h3>
-                    {/* --- MODIFIED ---
-                        The action now uses the full, absolute URL. This is critical. */}
-                    <form action={redirectUrl} className="paymentWidgets" data-brands="VISA MASTER"></form>
+                    {/* --- FIXED ---
+                        The `action` attribute has been completely removed.
+                        The HyperPay widget will now automatically use the shopperResultUrl
+                        that you provided when the checkout ID was created.
+                    */}
+                    <form className="paymentWidgets" data-brands="VISA MASTER"></form>
                 </div>
             )}
             {error && <p className="error-message">Error: {error}</p>}
@@ -102,6 +99,7 @@ function PaymentForm() {
     );
 }
 
+// PaymentStatus and App components remain unchanged.
 function PaymentStatus() {
     const [searchParams] = useSearchParams();
     const [status, setStatus] = useState('Verifying...');
