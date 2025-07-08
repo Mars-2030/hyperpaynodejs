@@ -1,11 +1,21 @@
+# netlify.toml
+
 # Build settings for your React app
 [build]
-  command = "npm run build"      # The command to build your site
-  publish = "build"              # The folder with your built static files
-  functions = "netlify/functions"  # The folder where your serverless functions live
+  command = "npm run build"
+  publish = "build"
+  functions = "netlify/functions"
 
-# Redirect rule to proxy API calls to your functions
+# --- Rule 1: API Proxy (must come first) ---
+# This forwards requests from /api/* to your serverless functions.
 [[redirects]]
   from = "/api/*"
   to = "/.netlify/functions/:splat"
+  status = 200
+
+# --- Rule 2: Single-Page App (SPA) Catch-all (must come last) ---
+# This makes sure that direct visits to routes like /status work correctly.
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
   status = 200
