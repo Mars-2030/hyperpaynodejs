@@ -1,17 +1,24 @@
 const fetch = require('node-fetch');
 
-// These constants must be defined in this file to be used.
 const API_BASE_URL = "https://eu-test.oppwa.com";
 const ENTITY_ID = "8ac7a4c897bdb7700197c0c19d1c0488";
 const BEARER_TOKEN = process.env.HYPERPAY_BEARER_TOKEN;
 
 exports.handler = async (event) => {
-    const { id } = event.queryStringParameters;
+    // Get the raw ID from the query parameter
+    let { id } = event.queryStringParameters;
 
-    console.log("Attempting to verify payment status for checkout ID:", id);
+    // --- THIS IS THE CRITICAL FIX ---
+    // The ID from the redirect can include transaction metadata after a dot.
+    // We must clean it to get only the pure checkout ID before using it.
+    if (id && id.includes('.')) {
+        console.log("Cleaning raw ID from redirect:", id);
+        id = id.split('.')[0];
+        console.log("Using cleaned ID for status check:", id);
+    }
+    // --- END OF FIX ---
 
     if (!id || id === 'null' || id === 'undefined') {
-        console.error("Error: The checkout ID is missing or invalid.");
         return {
             statusCode: 400,
             body: JSON.stringify({
@@ -21,7 +28,6 @@ exports.handler = async (event) => {
         };
     }
     
-    // Now API_BASE_URL and ENTITY_ID are defined and this line will work
     const url = `${API_BASE_URL}/v1/checkouts/${id}/payment?entityId=${ENTITY_ID}`;
 
     try {
