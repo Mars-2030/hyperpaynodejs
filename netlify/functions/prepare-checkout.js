@@ -3,7 +3,7 @@ const fetch = require('node-fetch');
 
 // Get sensitive credentials from environment variables
 const API_BASE_URL = "https://eu-test.oppwa.com";
-const ENTITY_ID = "8ac7a4c897bdb7700197c0c19d1c0488";
+const ENTITY_ID = process.env.HYPERPAY_ENTITY_ID;
 const BEARER_TOKEN = process.env.HYPERPAY_BEARER_TOKEN;
 
 exports.handler = async (event) => {
