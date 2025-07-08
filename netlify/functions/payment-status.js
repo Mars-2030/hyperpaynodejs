@@ -1,4 +1,3 @@
-// netlify/functions/payment-status.js
 const fetch = require('node-fetch');
 
 const API_BASE_URL = "https://eu-test.oppwa.com";
@@ -6,7 +5,6 @@ const ENTITY_ID = "8ac7a4c897bdb7700197c0c19d1c0488";
 const BEARER_TOKEN = process.env.HYPERPAY_BEARER_TOKEN;
 
 exports.handler = async (event) => {
-    // Get the checkout 'id' from the query string parameters
     const { id } = event.queryStringParameters;
 
     if (!id) {
@@ -18,9 +16,7 @@ exports.handler = async (event) => {
     try {
         const response = await fetch(url, {
             method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${BEARER_TOKEN}`
-            }
+            headers: { 'Authorization': `Bearer ${BEARER_TOKEN}` }
         });
         const responseData = await response.json();
 

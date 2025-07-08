@@ -1,20 +1,24 @@
-// netlify/functions/prepare-checkout.js
+// This file uses require() which works with node-fetch v2.
 const fetch = require('node-fetch');
 
+// Get sensitive credentials from environment variables
 const API_BASE_URL = "https://eu-test.oppwa.com";
 const ENTITY_ID = "8ac7a4c897bdb7700197c0c19d1c0488";
-// Get the Bearer Token from environment variables for security
 const BEARER_TOKEN = process.env.HYPERPAY_BEARER_TOKEN;
 
 exports.handler = async (event) => {
-    // Netlify functions are triggered by HTTP events.
-    // We only want to handle POST requests for this function.
     if (event.httpMethod !== 'POST') {
         return { statusCode: 405, body: 'Method Not Allowed' };
     }
 
     try {
-        const { amount, fname, lname, email } = JSON.parse(event.body);
+        // --- MODIFIED ---
+        // We now receive the shopperResultUrl from the frontend
+        const { amount, fname, lname, email, shopperResultUrl } = JSON.parse(event.body);
+
+        if (!shopperResultUrl) {
+            return { statusCode: 400, body: JSON.stringify({ error: 'shopperResultUrl is required' }) };
+        }
 
         const data = new URLSearchParams();
         data.append("entityId", ENTITY_ID);
@@ -27,6 +31,9 @@ exports.handler = async (event) => {
         data.append("billing.country", "SA");
         data.append("billing.city", "Riyadh");
         data.append("billing.street1", "Riyadh");
+        // --- ADDED ---
+        // Pass the absolute redirect URL to HyperPay. This is best practice.
+        data.append("shopperResultUrl", shopperResultUrl);
 
         const response = await fetch(`${API_BASE_URL}/v1/checkouts`, {
             method: 'POST',
