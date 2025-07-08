@@ -137,7 +137,7 @@ function PaymentStatus() {
             <h1>Payment Status</h1>
             <h2 className={`status-${status.toLowerCase()}`}>{status}</h2>
             <p>{description}</p>
-            <p className="arabic-text">الرجاء الانتظار لحين اكتمال عملية الشراء</p>
+            <p className="arabic-text"> please wait while we verify your payment...</p>
             {status === "Verifying..." && <div className="spinner"></div>}
         </div>
     );
