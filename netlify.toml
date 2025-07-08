@@ -1,0 +1,13 @@
+# netlify.toml
+
+# Build settings for your React app
+[build]
+  command = "npm run build"      # The command to build your site
+  publish = "build"              # The folder with your built static files
+  functions = "netlify/functions"  # The folder where your serverless functions live
+
+# Redirect rule to make your functions available at a clean URL
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/:splat"
+  status = 200
