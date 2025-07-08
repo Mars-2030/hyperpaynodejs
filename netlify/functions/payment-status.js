@@ -11,11 +11,11 @@ exports.handler = async (event) => {
     // --- THIS IS THE CRITICAL FIX ---
     // The ID from the redirect can include transaction metadata after a dot.
     // We must clean it to get only the pure checkout ID before using it.
-    if (id && id.includes('.')) {
-        console.log("Cleaning raw ID from redirect:", id);
-        id = id.split('.')[0];
-        console.log("Using cleaned ID for status check:", id);
-    }
+    // if (id && id.includes('.')) {
+    //     console.log("Cleaning raw ID from redirect:", id);
+    //     id = id.split('.')[0];
+    //     console.log("Using cleaned ID for status check:", id);
+    // }
     // --- END OF FIX ---
 
     if (!id || id === 'null' || id === 'undefined') {
