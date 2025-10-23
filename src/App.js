@@ -27,6 +27,13 @@ function PaymentForm() {
                     supportedNetworks: ["masterCard", "visa", "mada"],
                     currencyCode: "SAR",
                     merchantIdentifier: "merchant.clinic.com"
+                    onPaymentAuthorized: function(payment) {
+                    console.log("Apple Pay authorized:", payment);
+                    // Signal success to the widget to proceed
+                    return Promise.resolve({
+                        status: "SUCCESS"
+                    });
+                }
                 }
             };
             const script = document.createElement('script');
