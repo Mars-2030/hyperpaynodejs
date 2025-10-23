@@ -24,7 +24,7 @@ function PaymentForm() {
                 applePay: {
                     displayName: "test",
                     total: { label: "test, INC." },
-                    supportedNetworks: ["masterCard", "visa"]
+                    supportedNetworks: ["masterCard", "visa", "applepay", "mada"]
                 }
             };
             const script = document.createElement('script');
@@ -91,7 +91,7 @@ function PaymentForm() {
                         The HyperPay widget will now automatically use the shopperResultUrl
                         that you provided when the checkout ID was created.
                     */}
-                    <form className="paymentWidgets" data-brands="VISA MASTER"></form>
+                    <form className="paymentWidgets" data-brands="VISA MASTER MADA APPLEPAY"></form>
                 </div>
             )}
             {error && <p className="error-message">Error: {error}</p>}
