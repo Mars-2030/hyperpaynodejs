@@ -9,8 +9,8 @@ import './App.css'; // Make sure you have this CSS file for styling
 
 function PaymentForm() {
     const [formData] = useState({
-        amount: 500,
-        fname: "Beauty",
+        amount: 100,
+        fname: "Iam",
         lname: "Client",
         email: "info@email.net",
     });
