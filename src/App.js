@@ -24,7 +24,7 @@ function PaymentForm() {
                 applePay: {
                     displayName: "test",
                     total: { label: "test, INC." },
-                    supportedNetworks: ["masterCard", "visa", "applepay", "mada"]
+                    supportedNetworks: ["masterCard", "visa", "mada"]
                 }
             };
             const script = document.createElement('script');
