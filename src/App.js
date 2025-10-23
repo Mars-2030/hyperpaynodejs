@@ -26,7 +26,7 @@ function PaymentForm() {
                     total: { label: "test, INC." },
                     supportedNetworks: ["masterCard", "visa", "mada"],
                     currencyCode: "SAR",
-                    merchantIdentifier: "merchant.clinic.com"
+                    merchantIdentifier: "merchant.clinic.com",
                     onPaymentAuthorized: function(payment) {
                     console.log("Apple Pay authorized:", payment);
                     // Signal success to the widget to proceed
