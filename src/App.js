@@ -24,7 +24,9 @@ function PaymentForm() {
                 applePay: {
                     displayName: "test",
                     total: { label: "test, INC." },
-                    supportedNetworks: ["masterCard", "visa", "mada"]
+                    supportedNetworks: ["masterCard", "visa", "mada"],
+                    currencyCode: "SAR",
+                    merchantIdentifier: "merchant.clinic.com"
                 }
             };
             const script = document.createElement('script');
