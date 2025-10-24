@@ -37,7 +37,7 @@ function PaymentForm() {
         if (checkoutId && nonce) {
             window.wpwlOptions = {
                 applePay: {
-                      displayName: "Spectrum Clinics",
+                      displayName: "Virtual Spectrum Medical Company",
                       total: { label: "Spectrum Clinics" },
                       supportedNetworks: ["masterCard", "visa", "mada"],
                       supportedCountries: ["SA"],
