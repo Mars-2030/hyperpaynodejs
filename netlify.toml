@@ -6,6 +6,11 @@
   publish = "build"
   functions = "netlify/functions"
 
+[[edge_functions]]
+  # Apply this function to your main HTML page
+  path = "/"
+  function = "csp-nonce" # Matches the filename without extension
+
 # --- Rule 1: API Proxy (must come first) ---
 # This forwards requests from /api/* to your serverless functions.
 [[redirects]]
