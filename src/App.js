@@ -22,9 +22,10 @@ function PaymentForm() {
         if (checkoutId) {
             window.wpwlOptions = {
                 applePay: {
-                    displayName: "test",
-                    total: { label: "test, INC." },
-                    supportedNetworks: ["masterCard", "visa", "mada"],
+                      displayName: "Spectrum Clinics",
+                      total: { label: "Spectrum Clinics" },
+                      supportedNetworks: ["masterCard", "visa", "mada"],
+                      supportedCountries: ["SA"],
                     currencyCode: "SAR",
                     merchantIdentifier: "merchant.clinic.com",
                     onPaymentAuthorized: function(payment) {
