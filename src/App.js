@@ -34,36 +34,84 @@ function PaymentForm() {
   }, []); // Empty dependency array means run once on mount
 
     useEffect(() => {
-        if (checkoutId && nonce) {
+
+
+          if (checkoutId && nonce) {
+        // --- SOLUTION: CREATE AN INLINE SCRIPT FOR THE OPTIONS ---
+
+        // 1. Create a script element specifically for the wpwlOptions object.
+        const optionsScript = document.createElement('script');
+        optionsScript.setAttribute('nonce', nonce); // The nonce is critical here too!
+
+        // 2. Define the wpwlOptions and inject it as the script's content.
+        // This ensures the options are globally available BEFORE the widget loads.
+        optionsScript.innerHTML = `
             window.wpwlOptions = {
                 applePay: {
                     displayName: "Virtual Spectrum Medical Company",
                     total: { label: "Spectrum Clinics" },
-                    supportedNetworks: ["masterCard", "visa", "mada"],
-                    supportedCountries: ["SA"],
+                    merchantIdentifier: "merchant.clinic.com", // <-- Replace with your real ID
+                    countryCode: "SA",
                     currencyCode: "SAR",
-                    merchantIdentifier: "merchant.clinic.com",
-                    onPaymentAuthorized: function(payment) {
-                    console.log("Apple Pay authorized:", payment);
-                    // Signal success to the widget to proceed
-                    return Promise.resolve({
-                        status: "SUCCESS"
-                    });
-                }
+                    supportedNetworks: ["mada", "visa", "masterCard"]
+                },
+                onReady: function() {
+                    console.log("HyperPay widget is ready.");
+                },
+                onError: function(error) {
+                    console.error("HyperPay widget error:", error);
                 }
             };
-            const script = document.createElement('script');
-            script.src = `https://eu-test.oppwa.com/v1/paymentWidgets.js?checkoutId=${checkoutId}`;
-            script.async = true;
-            script.setAttribute('nonce', nonce);
-            document.body.appendChild(script);
+        `;
 
-            return () => {
-                document.body.removeChild(script);
-                const wpwlFrame = document.querySelector('.wpwl-iframe');
-                if (wpwlFrame) wpwlFrame.remove();
-            };
-        }
+        // 3. Append this options script to the body first.
+        document.body.appendChild(optionsScript);
+
+        // 4. Now, create and append the main widget script as before.
+        const widgetScript = document.createElement('script');
+        widgetScript.src = `https://eu-test.oppwa.com/v1/paymentWidgets.js?checkoutId=${checkoutId}`;
+        widgetScript.async = true;
+        widgetScript.setAttribute('nonce', nonce);
+        document.body.appendChild(widgetScript);
+
+        // 5. Return a cleanup function to remove both scripts.
+        return () => {
+            document.body.removeChild(optionsScript);
+            document.body.removeChild(widgetScript);
+            const wpwlFrame = document.querySelector('.wpwl-iframe');
+            if (wpwlFrame) wpwlFrame.remove();
+        };
+    }
+        // if (checkoutId && nonce) {
+        //     window.wpwlOptions = {
+        //         applePay: {
+        //             displayName: "Virtual Spectrum Medical Company",
+        //             total: { label: "Spectrum Clinics" },
+        //             supportedNetworks: ["masterCard", "visa", "mada"],
+        //             supportedCountries: ["SA"],
+        //             currencyCode: "SAR",
+        //             merchantIdentifier: "merchant.clinic.com",
+        //             onPaymentAuthorized: function(payment) {
+        //             console.log("Apple Pay authorized:", payment);
+        //             // Signal success to the widget to proceed
+        //             return Promise.resolve({
+        //                 status: "SUCCESS"
+        //             });
+        //         }
+        //         }
+        //     };
+        //     const script = document.createElement('script');
+        //     script.src = `https://eu-test.oppwa.com/v1/paymentWidgets.js?checkoutId=${checkoutId}`;
+        //     script.async = true;
+        //     script.setAttribute('nonce', nonce);
+        //     document.body.appendChild(script);
+
+        //     return () => {
+        //         document.body.removeChild(script);
+        //         const wpwlFrame = document.querySelector('.wpwl-iframe');
+        //         if (wpwlFrame) wpwlFrame.remove();
+        //     };
+        // }
     }, [checkoutId, nonce]);
 
     const handlePrepareCheckout = async () => {
