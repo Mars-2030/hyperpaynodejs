@@ -20,4 +20,19 @@
   to = "/index.html"
   status = 200
   
-
+# --- ADD OR MODIFY HEADERS SECTION ---
+[[headers]]
+  # Apply headers to all paths
+  for = "/*"
+  [headers.values]
+    # --- Content Security Policy ---
+    # WARNING: This is an EXAMPLE. You might need MORE directives.
+    # Start with 'self' and add what's needed.
+    # Add 'blob:' to worker-src.
+    # You also need to allow scripts from eu-test.oppwa.com
+    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' https://eu-test.oppwa.com; style-src 'self' 'unsafe-inline'; img-src 'self' data:; frame-src https://eu-test.oppwa.com; worker-src 'self' blob:; connect-src 'self' https://eu-test.oppwa.com *.netlify.app;"
+    # Add other headers Netlify recommends, like X-Frame-Options etc. if needed
+    # X-Frame-Options = "DENY"
+    # X-Content-Type-Options = "nosniff"
+    # Referrer-Policy = "strict-origin-when-cross-origin"
+    # Permissions-Policy = "camera=(), microphone=(), geolocation=()"
