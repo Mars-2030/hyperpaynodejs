@@ -20,7 +20,4 @@
   to = "/index.html"
   status = 200
   
-[[redirects]]
-  from = "/.well-known/*"
-  to ="/well-known/:splat"
-  status = 200
+
