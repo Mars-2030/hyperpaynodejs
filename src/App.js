@@ -7,6 +7,10 @@ import {
 } from 'react-router-dom';
 import './App.css'; // Make sure you have this CSS file for styling
 
+function getNonce() {
+  const meta = document.querySelector('meta[name="csp-nonce"]');
+  return meta ? meta.getAttribute('content') : null;
+}
 function PaymentForm() {
     const [formData] = useState({
         amount: 100,
@@ -17,9 +21,20 @@ function PaymentForm() {
     const [checkoutId, setCheckoutId] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
+    const [nonce, setNonce] = useState('');
 
     useEffect(() => {
-        if (checkoutId) {
+    const retrievedNonce = getNonce();
+    if (retrievedNonce) {
+      setNonce(retrievedNonce);
+      console.log("CSP Nonce retrieved:", retrievedNonce);
+    } else {
+      console.error("CSP Nonce meta tag not found!");
+    }
+  }, []); // Empty dependency array means run once on mount
+
+    useEffect(() => {
+        if (checkoutId && nonce) {
             window.wpwlOptions = {
                 applePay: {
                       displayName: "Spectrum Clinics",
@@ -40,6 +55,7 @@ function PaymentForm() {
             const script = document.createElement('script');
             script.src = `https://eu-test.oppwa.com/v1/paymentWidgets.js?checkoutId=${checkoutId}`;
             script.async = true;
+            script.setAttribute('nonce', nonce);
             document.body.appendChild(script);
 
             return () => {
@@ -48,7 +64,7 @@ function PaymentForm() {
                 if (wpwlFrame) wpwlFrame.remove();
             };
         }
-    }, [checkoutId]);
+    }, [checkoutId, nonce]);
 
     const handlePrepareCheckout = async () => {
         setIsLoading(true);
